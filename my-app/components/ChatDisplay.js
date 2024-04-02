@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     unreadContainer: {
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#FF6347',
+      backgroundColor: '#7e22ce',
       borderRadius: 12,
       width: 24,
       height: 24,

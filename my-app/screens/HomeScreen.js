@@ -4,7 +4,9 @@ import Button from '../components/Button';
 import ImageButton from '../components/ImageButton';
 import Chats from '../components/Chats';
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = ({navigation, route}) => {
+
+  const { chatsData } = route.params;
 
   const dummyData = [
     {chatName: "Hello", lastMessage:"At least", unreadCount: 3, chatId: 1},
@@ -35,7 +37,7 @@ const HomeScreen = ({navigation}) => {
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
         <View style={styles.chatSection}>
-          <Chats chats={dummyData} onPress={handleChatPress}/>
+          <Chats chats={chatsData} onPress={handleChatPress}/>
         </View>
       </ScrollView>
 

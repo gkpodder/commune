@@ -12,7 +12,6 @@ const LayoutComponent = ({ children }) => {
 
   return (
     <View style={styles.container}>
-      <Text>Welcome to the Layout Component!</Text>
         
       <View style={styles.buttonContainer}>
         <SmallImageButton onPress={handleNavigateBack} iconName='chevron-back'/>

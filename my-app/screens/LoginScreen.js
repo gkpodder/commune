@@ -4,7 +4,7 @@ import Button from '../components/Button';
 import { FIREBASE_AUTH } from '../FirebaseConfig';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import tw from 'twrnc';
-// import axios from 'axios';
+import axios from 'axios';
 
 const LoginScreen = ({navigation}) => {
 
@@ -13,16 +13,18 @@ const LoginScreen = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const auth = FIREBASE_AUTH;
 
+  const API_URL = "http://100.93.80.104:3000/";
+
   const signIn = async() => {
         setLoading(true);
         try {
             const response = await signInWithEmailAndPassword(auth, email, password);
 
             if (response && response.user && response.user.uid) {
-                // const response = await axios.post(process.env.API_URL+'account/signIn', data = {email: email});
-                // const body = response.data
-                // console.log(typeof body)
-                const body = "qfwef"
+              console.log(API_URL);
+                const response = await axios.post(API_URL+'account/signIn', data = {email: email});
+                const body = response.data
+                console.log(body)
 
                 navigation.navigate('Home', { chatsData: body })
             }
