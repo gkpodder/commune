@@ -12,4 +12,5 @@ scan on mobile device
 cd backend
 npm install
 npm start
+add a Firebase config file to the backend directory
 ```
