@@ -13,6 +13,7 @@ const LoginScreen = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const auth = FIREBASE_AUTH;
 
+  // change your api_url here
   const API_URL = "http://100.93.80.104:3000/";
 
   const signIn = async() => {
