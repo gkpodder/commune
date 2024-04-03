@@ -83,7 +83,7 @@ const LoginScreen = ({navigation}) => {
                 <View style={styles.flexContainer}>
                     <Button onPress={signIn} buttonText='LOGIN'/>
 
-                    <Button onPress={signIn} buttonText='SIGN UP'/>
+                    <Button onPress={signUp} buttonText='SIGN UP'/>
                 </View>
                 
             </KeyboardAvoidingView>
