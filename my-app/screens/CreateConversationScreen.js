@@ -1,8 +1,9 @@
-import { View, Text, TextInput } from 'react-native';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import LayoutComponent from '../components/Layout';
 import axios from 'axios';
 import Button from '../components/Button';
+import AddUserComponent from '../components/AddUserComponent';
 
 const CreateConversationScreen = () => {
 
@@ -65,8 +66,8 @@ const CreateConversationScreen = () => {
           {filteredEmails.map((email, index) => {
             return (
               <View key={index}>
-                <Text>{email}</Text>
-                <Button onPress={() => handleNewConversation(email)} buttonText="Add User"></Button>
+                <Text style={styles.search}>{email}</Text>
+                <AddUserComponent onPress={() => handleNewConversation(email)} email={email} />
               </View>
             )
           })}
@@ -76,3 +77,9 @@ const CreateConversationScreen = () => {
 }
 
 export default CreateConversationScreen
+
+styles = StyleSheet.create({
+  search: {
+    textAlign: "center"
+  }
+})
