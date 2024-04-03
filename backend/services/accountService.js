@@ -14,7 +14,7 @@ async function getUsers(db) {
     try {
       const usersCol = db.collection('users'); // Reference the 'users' collection
       const usersSnapshot = await usersCol.get();
-      const userList = usersSnapshot.docs.map(doc => doc.data());
+      const userList = usersSnapshot.docs.map(doc => doc.data().email);
       return userList;
     } catch (error) {
       console.error('Error getting users:', error);

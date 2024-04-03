@@ -8,6 +8,7 @@ import HomeScreen from './screens/HomeScreen';
 import ChatScreen from './screens/ChatScreen';
 import SummarizeScreen from './screens/SummarizeScreen';
 import SupportScreen from './screens/SupportScreen';
+import CreateConversationScreen from './screens/CreateConversationScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ export default function App() {
         <Stack.Screen name="Chat" component={ChatScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Summarize" component={SummarizeScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Support" component={SupportScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="Conversation" component={CreateConversationScreen} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

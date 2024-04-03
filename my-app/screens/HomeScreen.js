@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Button from '../components/Button';
 import ImageButton from '../components/ImageButton';
 import Chats from '../components/Chats';
+import CreateConversationComponent from '../components/CreateConversationComponent';
 
 const HomeScreen = ({navigation, route}) => {
 
@@ -35,6 +36,8 @@ const HomeScreen = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
+      <CreateConversationComponent />
+      
       <ScrollView style={styles.scrollView}>
         <View style={styles.chatSection}>
           <Chats chats={chatsData} onPress={handleChatPress}/>
