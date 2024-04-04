@@ -19,11 +19,8 @@ async function getMessages(db) {
   }
   
   const getAllMessages = async () => {
-    console.log("Get all messages call");
-  
     try {
       const messageList = await getMessages(db);
-      console.log(messageList)
       return messageList;
     } catch (error) {
       console.error('Error getting all messages:', error);
@@ -44,8 +41,21 @@ const createNewDocument = async (collectionName, data) => {
     }
   };
 
-const sendMessage = async(body, password) => {
-    
+const sendMessage = async(body) => {
+
+  console.log("Adding message to database")
+
+  const collectionName = 'messages';
+  const newUserData = body
+
+    createNewDocument(collectionName, newUserData)
+    .then((documentId) => {
+        return ('New document created with ID:' + documentId);
+    })
+    .catch((error) => {
+        console.error('Error creating document:', error);
+        return null;
+    });
 }
 
 module.exports = {
