@@ -22,10 +22,8 @@ const LoginScreen = ({navigation}) => {
             const response = await signInWithEmailAndPassword(auth, email, password);
 
             if (response && response.user && response.user.uid) {
-              console.log(API_URL);
                 const response = await axios.post(API_URL+'account/signIn', data = {email: email});
                 const body = response.data
-                console.log(body)
 
                 navigation.navigate('Home', { chatsData: body })
             }
