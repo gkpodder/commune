@@ -1,16 +1,17 @@
-import { View, Text} from 'react-native'
+import { View, Text, StyleSheet} from 'react-native'
 import React, { useState, useEffect} from 'react';
 import MessageList from '../components/MessageList'; 
+import NewMessageInput from '../components/NewMessageInput';
 import axios from 'axios'
 
 const ChatScreen = ({route}) => {
 
     const { chatId } = route.params;
-    const [messages, setMessages] = useState([
-    { sender: 'Alice', body: 'Hi there!' },
-    { sender: 'Bob', body: 'Hey! How are you?' },
-    { sender: 'Alice', body: "I'm doing well, thanks!" }
-    ]);
+    const [messages, setMessages] = useState([]);
+
+    const handleSend = (message) => {
+        // Logic to send the message to the backend or update state
+    };
 
     const API_URL = "http://100.125.168.14:3000/";
     useEffect(() => {
@@ -18,9 +19,9 @@ const ChatScreen = ({route}) => {
         const fetchMessages = async () => {
             try {
                 const response = await axios.get(API_URL+'message/getAllMessages');
-                console.log("chats")
-                console.log(response)
-                // setMessages(response.data);
+                // Filter messages based on chatId
+                const filteredMessages = response.data.filter(message => message.chatId === chatId);
+                setMessages(filteredMessages);
                 
             } catch (error) {
                 console.log(error);
@@ -31,27 +32,33 @@ const ChatScreen = ({route}) => {
         fetchMessages();
       }, []); 
 
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Welcome to the Summarize Page!</Text>
+
+      return (
+        <View style={styles.screenContainer}>
+            <View style={styles.header}>
+                <Text>Welcome to chat {chatId} with GK! </Text>
+            </View>
+            <View style={styles.messageContainer}>
+                <MessageList messages={messages} />
+            </View>
+            <View style={{paddingBottom: 50}}>
+                <NewMessageInput onSend={handleSend} />
+            </View>
         </View>
-    )
-   
-    // return (
-    //     <View style={{ flex: 1}}>
-    //     <View style={{ padding: 50 }}>
-    //         <Text>Welcome to chat {chatId}! </Text>
-    //     </View>
-    //     <View style={{ flex: 1, padding: 20 }}>
-    //         <MessageList messages={messages} />
-    //         {/* <MessageList messages={chatId} /> */}
-    //     </View>
-    //     <View style={{ padding: 50 }}>
-    //         <Text> hi</Text>
-    //         {/* <MessageInput onSendMessage={handleSendMessage} /> */}
-    //     </View>
-    //     </View>
-    // );
+    );
 };
 
-export default ChatScreen
+const styles = StyleSheet.create({
+    screenContainer: {
+        flex: 1,
+    },
+    header: {
+        padding: 50,
+    },
+    messageContainer: {
+        flex: 1,
+        padding: 20,
+    },
+});
+
+export default ChatScreen;
