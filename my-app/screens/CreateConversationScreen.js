@@ -56,7 +56,7 @@ const CreateConversationScreen = () => {
   }
 
   const createConversation = () => {
-    axios.post()
+    console.log("conversation created")
   }
 
   if (isLoading) {

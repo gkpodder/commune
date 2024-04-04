@@ -1,14 +1,7 @@
-const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
-const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
+const firebaseService = require('./firebaseService');
 require('dotenv').config();
 
-const serviceAccount = require(process.env.FIREBASE_SERVICE_ACCOUNT);
-
-initializeApp({
-  credential: cert(serviceAccount)
-});
-
-const db = getFirestore();
+const db = firebaseService.initializeApp();
 
 async function getUsers(db) {
     try {
@@ -35,7 +28,7 @@ async function getUsers(db) {
   };
 
 const signIn = async(email) => {
-    console.log("Logging in call")
+    console.log("Logging in call");
 
     try {
         const usersCol = db.collection('users'); // Reference the 'users' collection
@@ -66,7 +59,7 @@ const createNewDocument = async (collectionName, data) => {
     }
   };
 
-const signUp = async(email, password) => {
+const signUp = async(email) => {
     console.log("Signing up call")
 
     const collectionName = 'users';
@@ -75,14 +68,15 @@ const signUp = async(email, password) => {
         chats: []
     };
 
-    createNewDocument(collectionName, newUserData)
-    .then((documentId) => {
-        return ('New document created with ID:' + documentId);
-    })
-    .catch((error) => {
-        console.error('Error creating document:', error);
-        return null;
-    });
+    try {
+      const documentId = await createNewDocument(collectionName, newUserData);
+      console.log('New document created with ID:', documentId);
+      return true; // Return true if document creation succeeds
+  } catch (error) {
+      console.error('Error creating document:', error);
+      return false; // Return false if there's an error creating the document
+  }
+
 }
 
 module.exports = {
