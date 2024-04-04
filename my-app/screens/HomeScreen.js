@@ -9,19 +9,6 @@ const HomeScreen = ({navigation, route}) => {
 
   const { chatsData } = route.params;
 
-  const dummyData = [
-    {chatName: "Hello", lastMessage:"At least", unreadCount: 3, chatId: 1},
-    {chatName: "From", lastMessage:"I can", unreadCount: 0, chatId: 2},
-    {chatName: "The", lastMessage:"Say that", unreadCount: 9, chatId: 3},
-    {chatName: "Other", lastMessage:"I ", unreadCount: 100, chatId: 4},
-    {chatName: "Side", lastMessage:"Tried", unreadCount: 0, chatId: 5},
-    {chatName: "Hello", lastMessage:"At least", unreadCount: 3, chatId: 6},
-    {chatName: "From", lastMessage:"I can", unreadCount: 0, chatId: 7},
-    {chatName: "The", lastMessage:"Say that", unreadCount: 9, chatId: 8},
-    {chatName: "Other", lastMessage:"I ", unreadCount: 100, chatId: 9},
-    {chatName: "Side", lastMessage:"Tried", unreadCount: 0, chatId: 10},
-  ]
-
   const handleSummarizePress = () => {
     navigation.navigate("Summarize");
   };

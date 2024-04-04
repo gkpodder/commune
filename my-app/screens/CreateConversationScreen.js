@@ -66,8 +66,7 @@ const CreateConversationScreen = () => {
           {filteredEmails.map((email, index) => {
             return (
               <View key={index}>
-                <Text style={styles.search}>{email}</Text>
-                <AddUserComponent onPress={() => handleNewConversation(email)} email={email} />
+                <AddUserComponent onPress={() => handleNewConversation(email.email)} email={email.email} />
               </View>
             )
           })}

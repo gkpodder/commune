@@ -20,14 +20,17 @@ const styles = StyleSheet.create({
     marginTop: 20,
     width: "100%",
     paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    borderColor: '#ccc',
   },
   text: {
     fontSize: 16,
     textAlign: "center"
   },
   button: {
-    backgroundColor: 'blue',
-    paddingVertical: 8,
+    backgroundColor: '#7e22ce',
+    paddingVertical: 5,
     paddingHorizontal: 12,
     borderRadius: 5,
   },
