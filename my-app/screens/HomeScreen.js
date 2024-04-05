@@ -4,6 +4,7 @@ import Button from '../components/Button';
 import ImageButton from '../components/ImageButton';
 import Chats from '../components/Chats';
 import CreateConversationComponent from '../components/CreateConversationComponent';
+import ReceiveConversationComponent from '../components/ReceiveConversationComponent';
 
 const HomeScreen = ({navigation, route}) => {
 
@@ -23,7 +24,11 @@ const HomeScreen = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
-      <CreateConversationComponent />
+      <View style={{flexDirection: "row"}}>
+        <CreateConversationComponent />
+        <ReceiveConversationComponent />
+      </View>
+      
       
       <ScrollView style={styles.scrollView}>
         <View style={styles.chatSection}>
