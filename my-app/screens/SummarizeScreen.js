@@ -7,7 +7,7 @@ const SummarizeScreen = () => {
   const [summary, setSummary] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [contents, setContents] = useState({});
-  const API_URL = "http://100.81.216.12:3000/";
+  const API_URL = process.env.EXPO_PUBLIC_API_URL;
   const user = { "user": "gkpodder2003@gmail.com" };
 
 
@@ -21,6 +21,7 @@ const SummarizeScreen = () => {
 
         const response2 = await axios.post(API_URL + 'summarize', response1.data);
         const data = response2.data;
+        console.log(data[1].content)
         const summaries = Object.keys(data).map(chatId => ({
           id: chatId,
           summary: data[chatId].content
