@@ -11,15 +11,25 @@ createConversationRequest = async(req, res) => {
         
         res.send(createSuccess);
     } catch (error) {
-        console.error("Error loggin in user:", error);
+        console.error("Error creating conversation request: ", error);
         res.status(500).send("Error creating conversation request");
     }
     
 }
 
 getConversationRequests = async(req, res) => {
-    const conversationRequests = await conversationService.getConversationRequests();
-    res.send(conversationRequests);
+    try {
+        const {email} = req.body;
+        if (!email) {
+            return res.status(400).send("provide a valid email");
+        }
+
+        const conversationRequests = await conversationService.getConversationRequests(email);
+        res.send(conversationRequests);
+    } catch (error) {
+        console.error("Error getting conversation requests: ", error);
+        res.status(500).send("Error creating conversation request");
+    }
 }
 
 module.exports = {

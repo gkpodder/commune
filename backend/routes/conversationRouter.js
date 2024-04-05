@@ -4,6 +4,6 @@ const ConversationController = require("../controllers/conversationController.js
 
 router.post("/create", ConversationController.createConversationRequest)
 
-router.get("/get", ConversationController.getConversationRequests)
+router.post("/get", ConversationController.getConversationRequests)
 
 module.exports = router

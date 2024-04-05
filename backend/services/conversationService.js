@@ -50,6 +50,8 @@ const createConversationRequest = async (sender, recipient) => {
         const newRequestData = {
             sender: senderKey,
             recipient: recipientKey,
+            senderEmail: sender,
+            recipientEmail: recipient,
             master: masterKey
         }
 
@@ -68,7 +70,9 @@ const createConversationRequest = async (sender, recipient) => {
     }
 }
 
-const getConversationRequests = async () => {
+const getConversationRequests = async (email) => {
+    console.log("get request call!")
+
     try {
         const collectionName = 'requests';
         const requestsCol = db.collection(collectionName);
@@ -80,6 +84,8 @@ const getConversationRequests = async () => {
             requests.push({
                 sender: requestData.sender,
                 recipient: requestData.recipient,
+                senderEmail: requestData.senderEmail,
+                recipientEmail: requestData.recipientEmail,
                 master: requestData.master,
                 documentId: doc.id
             });
