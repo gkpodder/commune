@@ -32,7 +32,24 @@ getConversationRequests = async(req, res) => {
     }
 }
 
+acceptConversationRequest = async(req, res) => {
+    try {
+        const {sender, recipient} = req.body;
+        if (!sender || !recipient ) {
+            return res.status(400).send("provide a valid sender and recipient");
+        }
+
+        const acceptSuccess = await conversationService.acceptConversationRequest(sender, recipient);
+        
+        res.send(acceptSuccess);
+    } catch (error) {
+        console.error("Error creating conversation request: ", error);
+        res.status(500).send("Error creating conversation request");
+    }
+}
+
 module.exports = {
     createConversationRequest,
-    getConversationRequests
+    getConversationRequests,
+    acceptConversationRequest
 }

@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const ReceiveConversationScreen = () => {
 
     const [ requests, setRequests ] = useState([]);
+    const [ userEmail, setUserEmail ] = useState("");
 
     const API_URL = "http://100.93.80.104:3000/";
 
@@ -24,8 +25,8 @@ const ReceiveConversationScreen = () => {
 
     const fetchData = async () => {
         const email = await loadEmail();
+        setUserEmail(email);
 
-        
         const response = await axios.post(API_URL+'conversation/get', data = {email: email});
         const body = response.data;
 
@@ -36,7 +37,6 @@ const ReceiveConversationScreen = () => {
                 element.senderEmail
             )
         });
-        console.log(minorRequests);
 
         setRequests(minorRequests);
     }
@@ -45,8 +45,11 @@ const ReceiveConversationScreen = () => {
         fetchData();
     }, [])
 
-    const onAccept = (email) => {
-        console.log("accepted request from ", email);
+    const onAccept = async (email) => {
+        console.log(email);
+        console.log(userEmail);
+        const response = await axios.post(API_URL+'conversation/accept', data={sender: email, recipient: userEmail});
+        console.log(response.data);
     }
 
     const onReject = (email) => {

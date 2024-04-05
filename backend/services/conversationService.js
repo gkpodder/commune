@@ -98,7 +98,68 @@ const getConversationRequests = async (email) => {
     }
 }
 
+const acceptConversationRequest = async (senderEmail, recipientEmail) => {
+    console.log("accept request call")
+
+    const newChatData = {
+        chatId: 5,
+        chatName: "placeholder",
+        lastMessage: "WOOOOOOOOOOOOOOOOOOOOO",
+        unreadCount: 0,
+    }
+
+    try {
+        // add to chats of sender and recipient
+        const collectionName = 'users';
+        const usersCol = db.collection(collectionName);
+        
+        // find and update sender's chat
+        const senderQuery = await usersCol.where('email', '==', senderEmail).get();
+        if (!senderQuery.empty) {
+            const senderDoc = senderQuery.docs[0];
+            const senderData = senderDoc.data();
+            const updatedSenderChats = [...senderData.chats, newChatData];
+            await senderDoc.ref.update({ chats: updatedSenderChats });
+        } else {
+            throw new Error('Sender not found');
+        }
+
+        // find and update recipient's chat
+        const recipientQuery = await usersCol.where('email', '==', recipientEmail).get();
+        if (!recipientQuery.empty) {
+            const recipientDoc = recipientQuery.docs[0];
+            const recipientData = recipientDoc.data();
+            const updatedRecipientChats = [...recipientData.chats, newChatData];
+            await recipientDoc.ref.update({ chats: updatedRecipientChats });
+        } else {
+            throw new Error('Recipient not found');
+        }
+
+        console.log('Chats updated successfully');
+
+        // delete the request from requests
+        const requestsCol = db.collection('requests');
+        const requestQuery = await requestsCol
+            .where('senderEmail', '==', senderEmail)
+            .where('recipientEmail', '==', recipientEmail)
+            .get();
+
+        const batch = db.batch();
+        requestQuery.forEach((doc) => {
+            batch.delete(doc.ref);
+        });
+
+        await batch.commit();
+        console.log('Request deleted successfully');
+        return true;
+    } catch (error) {
+        console.error('Error accepting conversation request:', error);
+        throw error;
+    }
+}
+
 module.exports = {
     createConversationRequest,
-    getConversationRequests
+    getConversationRequests,
+    acceptConversationRequest
 }
