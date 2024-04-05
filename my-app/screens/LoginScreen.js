@@ -14,8 +14,8 @@ const LoginScreen = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const auth = FIREBASE_AUTH;
 
-  // change your api_url here
-  const API_URL = process.env.EXPO_PUBLIC_API_URL;
+    // change your api_url here
+    const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
     const saveEmail = async() => {
         try {
@@ -28,13 +28,14 @@ const LoginScreen = ({navigation}) => {
 
     const signIn = async() => {
         setLoading(true);
-        try {
+       try {
             const response = await signInWithEmailAndPassword(auth, email, password);
             
 
             if (response && response.user && response.user.uid) {
                 const response = await axios.post(API_URL+'account/signIn', data = {email: email});
                 const body = response.data;
+                console.log(API_URL);
                 
                 await saveEmail();
 
@@ -52,6 +53,13 @@ const LoginScreen = ({navigation}) => {
         setLoading(true);
         try {
             const response = await createUserWithEmailAndPassword(auth, email, password);
+
+            if (response) {
+                const response = await axios.post(API_URL+'account/signUp', data = {email: email});
+                const body = response.data;
+                console.log(API_URL);
+            }
+
             console.log(response);
         } catch (error) {
             console.log(error);
