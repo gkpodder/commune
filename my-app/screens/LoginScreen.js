@@ -3,6 +3,7 @@ import { View, Text, KeyboardAvoidingView, Image, TextInput, StyleSheet } from '
 import Button from '../components/Button';
 import { FIREBASE_AUTH } from '../FirebaseConfig';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import tw from 'twrnc';
 import axios from 'axios';
 
@@ -14,18 +15,32 @@ const LoginScreen = ({navigation}) => {
   const auth = FIREBASE_AUTH;
 
   // change your api_url here
+<<<<<<< HEAD
   const API_URL = "http://100.92.25.32:3000/";
+=======
+  const API_URL = process.env.EXPO_PUBLIC_API_URL;
+>>>>>>> efa148e65edef44200ba87598b78314337c4b2f1
 
-  const signIn = async() => {
+    const saveEmail = async() => {
+        try {
+            await AsyncStorage.setItem('userEmail', email);
+            console.log('email saved');
+        } catch (error) {
+            console.error('Error saving email', email);
+        }
+    }
+
+    const signIn = async() => {
         setLoading(true);
         try {
             const response = await signInWithEmailAndPassword(auth, email, password);
+            
 
             if (response && response.user && response.user.uid) {
-              console.log(API_URL);
                 const response = await axios.post(API_URL+'account/signIn', data = {email: email});
-                const body = response.data
-                console.log(body)
+                const body = response.data;
+                
+                await saveEmail();
 
                 navigation.navigate('Home', { chatsData: body })
             }
