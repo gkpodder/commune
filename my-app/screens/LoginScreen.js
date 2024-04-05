@@ -16,7 +16,7 @@ const LoginScreen = ({navigation}) => {
 
   // change your api_url here
   const API_URL = process.env.EXPO_PUBLIC_API_URL;
-  
+
     const saveEmail = async() => {
         try {
             await AsyncStorage.setItem('userEmail', email);
@@ -52,6 +52,13 @@ const LoginScreen = ({navigation}) => {
         setLoading(true);
         try {
             const response = await createUserWithEmailAndPassword(auth, email, password);
+ 
+            if (response) {
+                const response = await axios.post(API_URL+'account/signUp', data = {email: email});
+                const body = response.data;
+                console.log(API_URL);
+            }
+ 
             console.log(response);
         } catch (error) {
             console.log(error);

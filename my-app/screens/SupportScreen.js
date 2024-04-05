@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { View, Text, TextInput, Button, ScrollView } from 'react-native';
 import LayoutComponent from '../components/Layout'
 
@@ -6,13 +6,13 @@ const SupportScreen = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-  const [submit, setSubmit] = useState(False);
+  const [submitted, setSubmit] = useState(false);
 
-  const HandleFormSubmit = () => {
+  const handleFormSubmit = () => {
     console.log('Name', name);
     console.log('Email', email);
     console.log('Message', message);
-    setSubmitted(True);
+    setSubmitted(true);
   };
 
   return (
