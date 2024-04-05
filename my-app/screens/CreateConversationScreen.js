@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import LayoutComponent from '../components/Layout';
 import axios from 'axios';
 import AddUserComponent from '../components/AddUserComponent';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CreateConversationScreen = () => {
 
@@ -13,27 +14,53 @@ const CreateConversationScreen = () => {
   const [ filteredEmails, setFilteredEmails ] = useState([]);
   const [ isModal, setIsModal ] = useState(false);
   const [ selectedEmail, setSelectedEmail ] = useState("");
+  const [ userEmail, setUserEmail ] = useState("");
 
   const API_URL = "http://100.93.80.104:3000/";
 
-  useEffect(() => {
-    const fetchEmails = async () => {
-      try {
-        const response = await axios.get(API_URL + "account/");
-        const body = response.data
-  
-        setEmails(body);
-        setFilteredEmails(body);
-  
-      } catch (error) {
-        console.log(error);
-        alert('Sign in failed: ' + error.message)
-      } finally {
-        setIsLoading(false);
+  const loadEmail = async () => {
+    try {
+      const storedEmail = await AsyncStorage.getItem('userEmail');
+      if (storedEmail !== null) {
+        setUserEmail(storedEmail);
+        return storedEmail;
       }
+    } catch (error) {
+      console.error('Error loading email:', error);
     }
+  };
 
-    fetchEmails();
+  const fetchEmails = async () => {
+    try {
+      const userEmail = await loadEmail();
+      const response = await axios.get(API_URL + "account/");
+      const body = response.data
+      const filteredBody = body.filter((email) => email !== userEmail);
+      console.log(userEmail);
+      console.log(filteredBody);
+
+      setEmails(filteredBody);
+      setFilteredEmails(filteredBody);
+
+    } catch (error) {
+      console.log(error);
+      alert('Sign in failed: ' + error.message)
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  const fetchData = async () => {
+    try {
+      await loadEmail(); // Wait for loadEmail to finish
+      await fetchEmails(); // Then fetch emails
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
   }, [])
 
   const handleSearch = (text) => {
@@ -55,8 +82,9 @@ const CreateConversationScreen = () => {
     setIsModal(!isModal);
   }
 
-  const createConversation = () => {
-    console.log("conversation created")
+  const createConversation = async () => {
+    const response = await axios.post(API_URL+'conversation/create', data = {sender: userEmail, recipient: selectedEmail});
+    console.log(response.data);
   }
 
   if (isLoading) {
