@@ -18,6 +18,17 @@ const getSummary = async (req, res) => {
     }
 }
 
+const getConcatGroups = async (req, res) => {
+    try {
+        //pass in the email of the user
+        const chats = await SummaryService.getConcatenatedUserChatsById(req.body.user);
+        res.send(chats);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: 'Error getting groups' });
+    }
+}
+
 //export the function
-module.exports = { getSummary };
+module.exports = { getSummary, getConcatGroups };
 
