@@ -1,8 +1,9 @@
 const express = require('express')
 const router = express.Router()
-const SummarizeController = require("../controllers/summarizeController.js")
+const SummarizeController = require("../controllers/summarizeController.ts")
 
-router.get("/", SummarizeController.getSummary)
+//post request to /summarize
+router.post('/', SummarizeController.getSummary)
 
 //export the router
 module.exports = router
