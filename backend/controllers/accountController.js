@@ -9,7 +9,7 @@ signInUser = async(req, res) => {
     try {
         const {email} = req.body;
         if (!email) {
-            return res.status(400).send("Email");
+            return res.status(400).send("provide a valid email");
         }
 
         const signInResult = await AccountService.signIn(email);
@@ -23,16 +23,16 @@ signInUser = async(req, res) => {
 
 signUpUser = async(req, res) => {
     try {
-        const {email, password } = req.body;
-        if (!email || !password) {
-            return res.status(400).send("Email and password are required");
+        const {email} = req.body;
+        if (!email) {
+            return res.status(400).send("Email are required");
         }
 
-        const signUpResult = await AccountService.signUp(email, password);
+        const signUpResult = await AccountService.signUp(email);
 
         res.send(signUpResult);
     } catch (error) {
-        console.error("Error loggin in user:", error);
+        console.error("Error creating new user:", error);
         res.status(500).send("Error logging in user");
     }
 }

@@ -4,9 +4,13 @@ const app = express()
 // routes
 const AccountRouter = require('./routes/accountRouter.js')
 const MessageRouter = require('./routes/messageRouter.js')
+const ConversationRouter = require('./routes/conversationRouter.js');
+const SummarizeRouter = require('./routes/summarizeRouter.ts')
 
 app.use(express.json());
 app.use("/account", AccountRouter)
+app.use("/conversation", ConversationRouter)
+app.use("/summarize", SummarizeRouter)
 app.use("/message", MessageRouter)
 
 app.listen(3000, () => {
