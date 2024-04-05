@@ -14,8 +14,6 @@ const LoginScreen = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
     const auth = FIREBASE_AUTH;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
   // change your api_url here
   const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -29,38 +27,18 @@ const LoginScreen = ({ navigation }) => {
     }
 
     const signIn = async() => {
-=======
-    // change your api_url here
-    const API_URL = "http://100.81.216.12:3000/";
 
-    const signIn = async () => {
->>>>>>> 3852778 (fixed all the bugs and summerize backend mvp is finished)
-=======
-    // change your api_url here
-    const API_URL = process.env.EXPO_PUBLIC_API_URL;
-
-    const signIn = async () => {
->>>>>>> a1c6e8894e35a158342e2c0234da5ed35f8f26b6
         setLoading(true);
         try {
             const response = await signInWithEmailAndPassword(auth, email, password);
             
 
             if (response && response.user && response.user.uid) {
-<<<<<<< HEAD
-<<<<<<< HEAD
                 const response = await axios.post(API_URL+'account/signIn', data = {email: email});
                 const body = response.data;
                 
                 await saveEmail();
-=======
-=======
->>>>>>> a1c6e8894e35a158342e2c0234da5ed35f8f26b6
                 console.log(API_URL);
-                const response = await axios.post(API_URL + 'account/signIn', data = { email: email });
-                const body = response.data
-                console.log(body)
->>>>>>> 3852778 (fixed all the bugs and summerize backend mvp is finished)
 
                 navigation.navigate('Home', { chatsData: body })
             }
