@@ -15,12 +15,8 @@ const LoginScreen = ({navigation}) => {
   const auth = FIREBASE_AUTH;
 
   // change your api_url here
-<<<<<<< HEAD
-  const API_URL = "http://100.92.25.32:3000/";
-=======
   const API_URL = process.env.EXPO_PUBLIC_API_URL;
->>>>>>> efa148e65edef44200ba87598b78314337c4b2f1
-
+  
     const saveEmail = async() => {
         try {
             await AsyncStorage.setItem('userEmail', email);
