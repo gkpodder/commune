@@ -7,7 +7,7 @@ import firebase from 'firebase/app';
 import 'firebase/database';
 
 const ChatScreen = ({route}) => {
-    const API_URL = "http://100.125.168.14:3000/";
+    const API_URL = process.env.EXPO_PUBLIC_API_URL;
     const { chatId } = route.params;
     const [messages, setMessages] = useState([]);
 

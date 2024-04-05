@@ -14,7 +14,7 @@ const LoginScreen = ({navigation}) => {
   const auth = FIREBASE_AUTH;
 
   // change your api_url here
-  const API_URL = "http://100.125.168.14:3000/";
+  const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
   const signIn = async() => {
         setLoading(true);
