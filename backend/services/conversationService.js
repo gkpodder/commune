@@ -76,7 +76,7 @@ const getConversationRequests = async (email) => {
     try {
         const collectionName = 'requests';
         const requestsCol = db.collection(collectionName);
-        const snapshot = await requestsCol.get();
+        const snapshot = await requestsCol.where("recipientEmail", "==", email).get();
 
         const requests = [];
         snapshot.forEach((doc) => {
