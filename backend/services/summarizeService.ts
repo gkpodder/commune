@@ -19,7 +19,7 @@ async function getConcatenatedUserChatsById(email) {
         const users = accountSnapshot.docs.map(doc => doc.data());
         const user = users.find(user => user.email === email);
         // Retrieves from db in this format {chatId: string, lastActive: Timestamp}
-        const chats = user ? user.chats.map(chat => ({ chatId: chat.chatId, time: chat.lastActive.toDate() })) : [];
+        const chats = user ? user.chats.map(chat => ({ chatId: chat.chatId, time: chat.lastActive ? chat.lastActive.toDate() : null })) : [];
 
         // Gets all the messages
         const msgs = db.collection('messages');
