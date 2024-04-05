@@ -10,7 +10,7 @@ const ReceiveConversationScreen = () => {
     const [ requests, setRequests ] = useState([]);
     const [ userEmail, setUserEmail ] = useState("");
 
-    const API_URL = "http://100.93.80.104:3000/";
+    const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
     const loadEmail = async () => {
         try {

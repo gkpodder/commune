@@ -14,8 +14,8 @@ const LoginScreen = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const auth = FIREBASE_AUTH;
 
-    // change your api_url here
-    const API_URL = "http://100.93.80.104:3000/";
+  // change your api_url here
+  const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
     const saveEmail = async() => {
         try {
