@@ -4,10 +4,6 @@ require('dotenv').config();
 
 const serviceAccount = require(process.env.FIREBASE_SERVICE_ACCOUNT);
 
-initializeApp({
-  credential: cert(serviceAccount)
-});
-
 const db = getFirestore();
 
 async function getMessages(db) {
