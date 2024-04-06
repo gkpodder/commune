@@ -1,24 +1,25 @@
 import React from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 
-const MessageList = ({ messages }) => {
+const MessageList = ({ messages, userEmail  }) => {
     // Function to convert timestamp object to milliseconds
     const timestampToMilliseconds = timestamp => {
         return timestamp._seconds * 1000 + timestamp._nanoseconds / 1000000;
     };
 
     // Sort messages by date and time
-    const sortedMessages = messages.sort((a, b) => {
-        const timeA = timestampToMilliseconds(a.time);
-        const timeB = timestampToMilliseconds(b.time);
-        return timeA - timeB;
-    });
+    const sortedMessages = messages
+    // .sort((a, b) => {
+    //     const timeA = timestampToMilliseconds(a.time);
+    //     const timeB = timestampToMilliseconds(b.time);
+    //     return timeA - timeB;
+    // });
 
     return (
         <FlatList
             data={sortedMessages}
             renderItem={({ item }) => (
-                <View style={[styles.messageContainer, item.sender === 'baozelgo@gmail.com' ? styles.userMessage : styles.otherMessage]}>
+                <View style={[styles.messageContainer, item.sender === userEmail ? styles.userMessage : styles.otherMessage]}>
                     <View style={styles.senderContainer}>
                         <Text style={styles.senderText}>{item.sender}</Text>
                     </View>

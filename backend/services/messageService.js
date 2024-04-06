@@ -12,6 +12,7 @@ async function getMessages(db) {
       const messagesSnapshot = await messagesCol.get();
       const messageList = messagesSnapshot.docs.map(doc => doc.data());
       return messageList;
+      // get cur user, and update lastactive field;
     } catch (error) {
       console.error('Error getting messages:', error);
       throw error;
