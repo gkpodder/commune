@@ -5,21 +5,37 @@ import NewMessageInput from '../components/NewMessageInput';
 import axios from 'axios'
 import firebase from 'firebase/app';
 import 'firebase/database';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ChatScreen = ({route}) => {
     const API_URL = "http://100.125.168.14:3000/";
     const { chatId } = route.params;
     const [messages, setMessages] = useState([]);
+    const [userEmail, setUserEmail] = useState("");
+
+    const loadEmail = async () => {
+        try {
+          const storedEmail = await AsyncStorage.getItem('userEmail');
+          if (storedEmail !== null) {
+            setUserEmail(storedEmail);
+            return storedEmail;
+          }
+        } catch (error) {
+          console.error('Error loading email:', error);
+        }
+      };
 
     const handleSend = async (message) => {
         const currentTime = new Date();
+        const sender = await loadEmail();
         const newMessage = {
             body: message,
             chatId: chatId,
             time: {
                 _nanoseconds: currentTime.getMilliseconds() * 1000000, // Convert milliseconds to nanoseconds
                 _seconds: Math.floor(currentTime.getTime() / 1000) // Convert milliseconds to seconds
-            }
+            },
+            sender: sender
         }
         console.log(newMessage);
         // Refetch messages after sending a new message

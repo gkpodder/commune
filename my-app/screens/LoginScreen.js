@@ -27,7 +27,6 @@ const LoginScreen = ({ navigation }) => {
     }
 
     const signIn = async() => {
-
         setLoading(true);
         try {
             const response = await signInWithEmailAndPassword(auth, email, password);
