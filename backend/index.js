@@ -2,7 +2,8 @@ const express = require('express')
 const app = express()
 
 // routes
-const AccountRouter = require('./routes/accountRouter.js');
+const AccountRouter = require('./routes/accountRouter.js')
+const MessageRouter = require('./routes/messageRouter.js')
 const ConversationRouter = require('./routes/conversationRouter.js');
 const SummarizeRouter = require('./routes/summarizeRouter.ts')
 const MessageRouter = require('./routes/messageRouter.js')

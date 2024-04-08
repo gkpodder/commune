@@ -97,7 +97,6 @@ const ChatScreen = ({ route }) => {
     }
   };
 
-
   return (
     <View style={styles.screenContainer}>
       <View style={styles.header}>

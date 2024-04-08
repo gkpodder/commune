@@ -37,7 +37,6 @@ const LoginScreen = ({ navigation }) => {
                 const body = response.data;
                 
                 await saveEmail();
-                console.log(API_URL);
 
                 navigation.navigate('Home', { chatsData: body })
             }
