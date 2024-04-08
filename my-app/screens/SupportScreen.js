@@ -45,7 +45,7 @@ const SupportScreen = () => {
       <KeyboardAvoidingView behavior='padding'>
         <Text style={{ fontSize: 35, marginBottom: 10, marginTop: 50, textAlign: 'center',}}>Support & FAQ</Text>
 
-        <Text style={{ fontSize: 24, marginTop: 10, marginBottom: 10, alignSelf: 'center' }}>Frequently Asked Questions</Text>
+        <Text style={{ fontSize: 24, marginTop: 10, marginBottom: 20, alignSelf: 'center' }}>Frequently Asked Questions</Text>
       <ScrollView style={styles.scrollView}>
           {faqs.map((faq, index) => (
             <TouchableOpacity key={index} onPress={() => toggleExpand(index)}>
@@ -116,7 +116,6 @@ const styles = StyleSheet.create({
     scrollView: {
       flex: 1,
       marginHorizontal:10,
-      marginVertical: 5,
     },
     faqItem: {
       backgroundColor: '#e0e0e0',
