@@ -16,7 +16,7 @@ const HomeScreen = ({navigation, route}) => {
 
   const handleSupportPress = () => {
     navigation.navigate("Support");
-  };
+  };  
 
   const handleChatPress = (chatId, chatName) => {
     navigation.navigate('Chat', { chatId: chatId, chatName: chatName})
@@ -24,11 +24,6 @@ const HomeScreen = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
-      <View style={{flexDirection: "row"}}>
-        <CreateConversationComponent />
-        <ReceiveConversationComponent />
-      </View>
-      
       
       <ScrollView style={styles.scrollView}>
         <View style={styles.chatSection}>
@@ -38,6 +33,8 @@ const HomeScreen = ({navigation, route}) => {
 
       <View style={styles.bottomBar}>
         <ImageButton onPress={handleSummarizePress} iconName='albums-outline' />
+        <CreateConversationComponent />
+        <ReceiveConversationComponent />
         <ImageButton onPress={handleSupportPress} iconName='accessibility-outline' />
       </View>
     </View>
