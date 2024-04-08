@@ -18,8 +18,8 @@ const HomeScreen = ({navigation, route}) => {
     navigation.navigate("Support");
   };
 
-  const handleChatPress = (chatId) => {
-    navigation.navigate('Chat', { chatId: chatId})
+  const handleChatPress = (chatId, chatName) => {
+    navigation.navigate('Chat', { chatId: chatId, chatName: chatName})
   }
 
   return (

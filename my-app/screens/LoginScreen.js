@@ -27,7 +27,6 @@ const LoginScreen = ({ navigation }) => {
     }
 
     const signIn = async() => {
-
         setLoading(true);
         try {
             const response = await signInWithEmailAndPassword(auth, email, password);
@@ -38,7 +37,6 @@ const LoginScreen = ({ navigation }) => {
                 const body = response.data;
                 
                 await saveEmail();
-                console.log(API_URL);
 
                 navigation.navigate('Home', { chatsData: body })
             }

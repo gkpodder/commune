@@ -2,6 +2,22 @@ import { View, ScrollView, StyleSheet } from 'react-native'
 import React from 'react'
 import ChatDisplay from './ChatDisplay'
 
+
+const fetchMessage = async() => {
+  
+  try {
+      const response = await axios.get('YOUR_BACKEND_SERVER_URL/messages');
+
+      if (response && response.user && response.user.uid) {
+        console.log(API_URL);
+          const response = await axios.post(API_URL+'account/signIn', data = {email: email});
+          setMessages(response.data);
+      }
+  } catch (error) {
+      console.log(error);
+  }
+}
+
 const Chats = ({chats, onPress}) => {
     
     return (
@@ -13,7 +29,7 @@ const Chats = ({chats, onPress}) => {
                     chatName={chat.chatName} 
                     unreadCount={chat.unreadCount} 
                     lastMessage={chat.lastMessage}
-                    onPress={() => onPress(chat.chatId)}
+                    onPress={() => onPress(chat.chatId, chat.chatName)}
                 />
                 ))}
             </View>
