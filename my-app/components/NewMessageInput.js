@@ -29,7 +29,8 @@ const NewMessageInput = ({ onSend }) => {
                     placeholderTextColor="#003f5c"
                     value={message}
                     onChangeText={setMessage}
-                    onFocus={handleFocus}
+                    // commented out this line, still need to test on iphones
+                    // onFocus={handleFocus}
                     onBlur={handleBlur}
                 />
                 <TouchableOpacity

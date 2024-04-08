@@ -101,10 +101,13 @@ const getConversationRequests = async (email) => {
 const acceptConversationRequest = async (senderEmail, recipientEmail) => {
     console.log("accept request call")
 
+    const currentTime = new Date();
+
     const newChatData = {
         chatId: 5,
         chatName: "placeholder",
-        lastMessage: "WOOOOOOOOOOOOOOOOOOOOO",
+        lastMessage: "This is a new chat",
+        lastActive: currentTime,
         unreadCount: 0,
     }
 

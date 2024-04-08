@@ -29,7 +29,7 @@ const Chats = ({chats, onPress}) => {
                     chatName={chat.chatName} 
                     unreadCount={chat.unreadCount} 
                     lastMessage={chat.lastMessage}
-                    onPress={() => onPress(chat.chatId)}
+                    onPress={() => onPress(chat.chatId, chat.chatName)}
                 />
                 ))}
             </View>

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import MessageList from '../components/MessageList';
 import NewMessageInput from '../components/NewMessageInput';
@@ -9,9 +9,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ChatScreen = ({ route }) => {
   const API_URL = process.env.EXPO_PUBLIC_API_URL;
-  const { chatId } = route.params;
+  const { chatId, chatName } = route.params;
   const [messages, setMessages] = useState([]);
   const [userEmail, setUserEmail] = useState("");
+  const [ otherEmail, setOtherEmail ] = useState(undefined);
 
   const loadEmail = async () => {
     try {
@@ -39,7 +40,7 @@ const ChatScreen = ({ route }) => {
       const nanoseconds = messageTime.nanoseconds || 0; // Handle potential missing nanoseconds
       return new Date(seconds * 1000 + nanoseconds / 1000000);
     }
-    console.warn('Invalid timestamp format for message:', messageTime);
+    // console.warn('Invalid timestamp format for message:', messageTime);
     return null; // Handle invalid formats gracefully
   };
 
@@ -67,6 +68,9 @@ const ChatScreen = ({ route }) => {
 
       // Sort messages before setting state
       const sortedMessages = sortMessages(filteredMessages);
+
+      const uniqueEmails = [...new Set(filteredMessages.map(message => message.sender))];
+      console.log(uniqueEmails);
 
       setMessages(sortedMessages);
       console.log(sortedMessages);
@@ -101,15 +105,21 @@ const ChatScreen = ({ route }) => {
 
   return (
     <View style={styles.screenContainer}>
-      <View style={styles.header}>
-        <Text>Welcome to chat {chatId} with GK! </Text>
-      </View>
-      <View style={styles.messageContainer}>
-        <MessageList messages={messages} userEmail={userEmail} />
-      </View>
-      <View style={{ paddingBottom: 50 }}>
-        <NewMessageInput onSend={handleSend} />
-      </View>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }} // Ensure the KeyboardAvoidingView takes up the full screen
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'} // Adjust behavior based on platform
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20} // Customize vertical offset if needed
+      >
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Chat #{chatId} with {chatName} </Text>
+        </View>
+        <View style={styles.messageContainer}>
+          <MessageList messages={messages} userEmail={userEmail} />
+        </View>
+        <View>
+          <NewMessageInput onSend={handleSend} />
+        </View>
+      </KeyboardAvoidingView>
     </View>
   );
 };
@@ -119,12 +129,21 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    padding: 50,
+    paddingTop: 50,
+    backgroundColor: '#f0f0f0',
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
   messageContainer: {
     flex: 1,
     padding: 20,
   },
+  headerText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  }
 });
 
 export default ChatScreen;
