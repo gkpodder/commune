@@ -37,7 +37,6 @@ async function getUsers(db) {
       }
   
       const userDocRef = querySnapshot.docs[0].ref; // Get the reference to the user document
-      console.log(userDocRef)
   
       // 2. Check if chatID exists in user's chats (if applicable):
       const userData = querySnapshot.docs[0].data(); // Get the user document data
@@ -52,7 +51,7 @@ async function getUsers(db) {
         const currentTime = Timestamp.fromDate(new Date()).toDate();
         await userDocRef.update({
           'chats': userChats.map(chat => {
-            if (chat.chatId === chatID) {
+            if (chat.chatId === parseInt(chatID)) {
               return { ...chat, lastActive: currentTime };
             } else {
               return chat;

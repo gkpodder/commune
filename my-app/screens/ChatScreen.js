@@ -25,8 +25,10 @@ const ChatScreen = ({ route }) => {
     }
    };
 
-   useEffect(async () => {
-    await loadEmail();
+   useEffect(() => {
+      async () => {
+      await loadEmail()
+    };
   }, []); 
 
    const extractTimestamp = (messageTime) => {

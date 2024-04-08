@@ -6,7 +6,6 @@ const AccountRouter = require('./routes/accountRouter.js')
 const MessageRouter = require('./routes/messageRouter.js')
 const ConversationRouter = require('./routes/conversationRouter.js');
 const SummarizeRouter = require('./routes/summarizeRouter.ts')
-const MessageRouter = require('./routes/messageRouter.js')
 
 app.use(express.json());
 app.use("/account", AccountRouter)
