@@ -1,8 +1,13 @@
 const MessageService = require("../services/messageService");
+const AccountService = require("../services/accountService");
+
+
 
 getAllMessages = async(req, res) => {
-    
+    const { email, chatId } = req.query;
+    console.log(req.query)
     const AllMessages = await MessageService.getAllMessages();
+    const updateLastActive = await AccountService.updateLastActive(email, chatId);
     res.send(AllMessages);
 }
 

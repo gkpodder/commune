@@ -24,6 +24,11 @@ const ChatScreen = ({ route }) => {
       console.error('Error loading email:', error);
     }
    };
+
+   useEffect(async () => {
+    await loadEmail();
+  }, []); 
+
    const extractTimestamp = (messageTime) => {
     if (typeof messageTime === 'string') {
       return new Date(messageTime); // ISO 8601 format
@@ -47,7 +52,13 @@ const ChatScreen = ({ route }) => {
 
   const fetchMessages = async () => {
     try {
-      const response = await axios.get(API_URL + 'message/getAllMessages');
+      const userEmail = await loadEmail();
+      const response = await axios.get(API_URL + 'message/getAllMessages', {
+        params: {
+            email: userEmail, // Pass the email as a query parameter
+            chatId: chatId
+        }
+      });
 
       // Filter messages based on chatId
       const filteredMessages = response.data.filter(message => message.chatId === chatId);
@@ -85,9 +96,7 @@ const ChatScreen = ({ route }) => {
       console.log(error);
     }
   };
-  useEffect(() => {
-    loadEmail();
-  }, []); 
+
 
   return (
     <View style={styles.screenContainer}>
