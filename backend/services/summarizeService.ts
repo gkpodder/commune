@@ -10,9 +10,10 @@ const cohere = new CohereClient({
 
 // Concatenates the messages of each chat the user is in and returns them
 async function getConcatenatedUserChatsById(email) {
+    console.log("getting concatenate user chats by Id");
 
     try {
-
+        
         // For a user, gets all the chats they are in and the last active time
         const account = db.collection('users');
         const accountSnapshot = await account.get();
@@ -96,10 +97,12 @@ async function getConcatenatedUserChatsById(email) {
             chatBodies[chatId] = contents2[chatId];
         }
 
-        return chats;
+        return chatBodies;
 
     } catch (error) {
+        console.log("error here");
         console.error(error);
+        
         return { message: 'Error getting concatenated groups' };
     }
 }
@@ -110,7 +113,6 @@ async function genSummary(content) {
         message: content,
         preamble: "Summarize the following text",
     });
-    console.log(summary.text)
     return summary.text;
 }
 

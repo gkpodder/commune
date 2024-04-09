@@ -1,5 +1,6 @@
 const { Timestamp, updateDoc, serverTimestamp } = require('firebase-admin/firestore');
 const firebaseService = require('./firebaseService');
+const { generateKey } = require('./keyHelper');
 require('dotenv').config();
 
 const db = firebaseService.initializeApp();
@@ -106,13 +107,25 @@ const signUp = async(email) => {
 
     const collectionName = 'users';
     const newUserData = {
-        email: email,
-        chats: []
+      email: email,
+      chats: []
     };
+
+    const keyCollectionName = 'keys';
+
+    const newKey = generateKey();
+
+    const newKeyData =  {
+      email: email,
+      key: newKey
+    }
 
     try {
       const documentId = await createNewDocument(collectionName, newUserData);
       console.log('New document created with ID:', documentId);
+
+      const keyId = await createNewDocument(keyCollectionName, newKeyData);
+      console.log('New document created with ID:', keyId);
       return true; // Return true if document creation succeeds
   } catch (error) {
       console.error('Error creating document:', error);

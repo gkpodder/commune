@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, KeyboardAvoidingView, Image, TextInput, StyleSheet } from 'react-native';
+import { View, Text, KeyboardAvoidingView, Image, TextInput, StyleSheet, Alert } from 'react-native';
 import Button from '../components/Button';
 import { FIREBASE_AUTH } from '../FirebaseConfig';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
@@ -55,11 +55,20 @@ const LoginScreen = ({ navigation }) => {
  
             if (response) {
                 const response = await axios.post(API_URL+'account/signUp', data = {email: email});
-                const body = response.data;
-                console.log(API_URL);
+                if (response.data) {
+
+                }
+                Alert.alert(
+                    'Successful Sign Up',
+                    'Please login to continue into commune',
+                    [
+                      { text: 'OK', onPress: () => console.log('OK Pressed') }
+                    ],
+                    { cancelable: false }
+                );
             }
  
-            console.log(response);
+            
         } catch (error) {
             console.log(error);
             alert('Sign up failed: ' + error.message)
