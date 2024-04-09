@@ -30,6 +30,52 @@ const CreateConversationScreen = () => {
     }
   };
 
+  const saveSessionKeys = async (keysObject) => {
+    try {
+      // Convert the keysObject to a string using JSON.stringify
+      const keysString = JSON.stringify(keysObject);
+      
+      // Store the serialized keysObject in AsyncStorage
+      await AsyncStorage.setItem('sessionKeys', keysString);
+      
+      console.log('Session keys saved');
+    } catch (error) {
+      console.error('Error saving session keys:', error);
+    }
+  };
+
+  const addSessionKey = async (newKey, newValue) => {
+    try {
+      // Retrieve existing keys from AsyncStorage
+      const keysString = await AsyncStorage.getItem('sessionKeys');
+      let keysObject = keysString ? JSON.parse(keysString) : {};
+  
+      // Add the new key to the existing keys object
+      keysObject[newKey] = newValue;
+  
+      // Store the updated keys object in AsyncStorage
+      await AsyncStorage.setItem('sessionKeys', JSON.stringify(keysObject));
+  
+      console.log('Session key added:', newKey);
+    } catch (error) {
+      console.error('Error adding session key:', error);
+    }
+  };
+
+  const getSessionKeys = async () => {
+    try {
+      const keysString = await AsyncStorage.getItem('sessionKeys');
+      if (keysString !== null) {
+        const keysObject = JSON.parse(keysString);
+        console.log('Session keys retrieved:', keysObject);
+      } else {
+        console.log('No session keys found');
+      }
+    } catch (error) {
+      console.error('Error retrieving session keys:', error);
+    }
+  };
+
   const fetchEmails = async () => {
     try {
       const userEmail = await loadEmail();

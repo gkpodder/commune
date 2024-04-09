@@ -44,7 +44,7 @@ const createConversationRequest = async (sender, recipient) => {
     try {
         const [senderKey, recipientKey] = await getMasterKeys(sender, recipient);
 
-        masterKey = generateKey();
+        sessionKey = generateKey();
 
         const collectionName = 'requests';
         const newRequestData = {
@@ -52,7 +52,7 @@ const createConversationRequest = async (sender, recipient) => {
             recipient: recipientKey,
             senderEmail: sender,
             recipientEmail: recipient,
-            master: masterKey
+            master: sessionKey
         }
 
         createNewDocument(collectionName, newRequestData)
@@ -63,7 +63,7 @@ const createConversationRequest = async (sender, recipient) => {
             console.error('Error creating request: ' + error);
             return null;
         })
-        return true;
+        return sessionKey;
     } catch (error) {
         console.error('Error creating document:', error);
         return false; // Return false if there's an error creating the document
