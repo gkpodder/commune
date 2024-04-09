@@ -2,13 +2,33 @@ import { View, Text, ScrollView, StyleSheet } from 'react-native'
 import LayoutComponent from '../components/Layout'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SummarizeScreen = () => {
   const [summary, setSummary] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [contents, setContents] = useState({});
+  const [userEmail, setUserEmail] = useState("");
   const API_URL = process.env.EXPO_PUBLIC_API_URL;
-  const user = { "user": "gkpodder2003@gmail.com" };
+  //const user = { "user": "gkpodder2003@gmail.com" };
+
+  const loadEmail = async () => {
+    try {
+      const storedEmail = await AsyncStorage.getItem('userEmail');
+      if (storedEmail !== null) {
+        setUserEmail(storedEmail);
+        return storedEmail;
+      }
+    } catch (error) {
+      console.error('Error loading email:', error);
+    }
+  };
+
+  useEffect(() => {
+    async () => {
+      await loadEmail()
+    };
+  }, []);
 
 
   //Retrieves msg data from the backend and then summarizes it with another call and then displays it
@@ -16,7 +36,8 @@ const SummarizeScreen = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response1 = await axios.post(API_URL + 'summarize/chats', user);
+        const userEmail = await loadEmail();
+        const response1 = await axios.post(API_URL + 'summarize/chats', { "user": userEmail });
         setContents(response1.data);
 
         const response2 = await axios.post(API_URL + 'summarize', response1.data);
