@@ -6,8 +6,9 @@ import axios from 'axios';
 import { Timestamp, serverTimestamp, collection, onSnapshot, query, where } from "@firebase/firestore";
 import 'firebase/database';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { db } from '../FirebaseConfig';
 import { update } from 'firebase/database';
+import { clearInterval } from 'react-native';
+
 
 const ChatScreen = ({ route }) => {
   const API_URL = process.env.EXPO_PUBLIC_API_URL;
@@ -32,18 +33,6 @@ const ChatScreen = ({ route }) => {
       async () => {
       await loadEmail()
     };
-
-    const messagesQuery = query(
-      collection(db, 'messages'),
-      where('chatId', '==', chatId) // Filter by chatId
-      // orderBy('createdAt', 'desc') // Order by createdAt descending (optional)
-    );
-    
-    const unsubscribe = messagesQuery.onSnapshot((snapshot) => {
-      const updatedDocuments = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-      // Process the updated documents here (e.g., update state)
-    });
-
   }, []); 
 
    const extractTimestamp = (messageTime) => {
@@ -97,7 +86,20 @@ const ChatScreen = ({ route }) => {
     fetchMessages();
   }, []);
   
+  useEffect(() => {
+    // Fetch messages initially
+    fetchMessages();
+  
+    // Set up interval to fetch messages periodically
+    const interval = setInterval(() => {
+      fetchMessages();
+    }, 1000); // Fetch messages every second (adjust interval as needed)
+  
+    // Cleanup function to clear the interval when the component unmounts
+    return () => clearInterval(interval);
+  }, []); // Empty dependency array ensures the effect runs only once when component mounts
 
+  
   const handleSend = async (message) => {
     const currentTime = serverTimestamp();
     const sender = await loadEmail();
