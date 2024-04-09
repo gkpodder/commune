@@ -20,25 +20,44 @@ const LoginScreen = ({ navigation }) => {
     const saveEmail = async() => {
         try {
             await AsyncStorage.setItem('userEmail', email);
-            console.log('email saved');
+            console.log('Email saved to async storage');
         } catch (error) {
-            console.error('Error saving email', email);
+            console.error('Error saving email to async storage');
         }
+    }
+
+    const saveKeys = async(userKey, sessionKeys) => {
+        // saving userKeys
+        try {
+            const stringifiedKeyData = userKey[0];
+            const stringifiedSessionData = JSON.stringify(sessionKeys);
+            await AsyncStorage.setItem('userKey', stringifiedKeyData);
+            await AsyncStorage.setItem('sessionKey', stringifiedSessionData)
+            console.log('Keys saved to async storage');
+        } catch (error) {
+            console.error('Error saving userKey', userKey);
+        }
+        // saving sessionKeys
+
     }
 
     const signIn = async() => {
         setLoading(true);
         try {
             const response = await signInWithEmailAndPassword(auth, email, password);
-            
 
             if (response && response.user && response.user.uid) {
                 const response = await axios.post(API_URL+'account/signIn', data = {email: email});
                 const body = response.data;
+                const chats = body.chats;
+                const userKey = body.userKey;
+                const sessionKeys = body.sessionKeys;
+                console.log(userKey, sessionKeys)
                 
                 await saveEmail();
+                await saveKeys(userKey, sessionKeys);
 
-                navigation.navigate('Home', { chatsData: body })
+                navigation.navigate('Home', { email: email })
             }
         } catch (error) {
             console.log(error);

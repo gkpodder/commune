@@ -9,6 +9,7 @@ const ReceiveConversationScreen = () => {
 
     const [ requests, setRequests ] = useState([]);
     const [ userEmail, setUserEmail ] = useState("");
+    const [ userKey, setUserKey ] = useState("");
 
     const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -21,10 +22,23 @@ const ReceiveConversationScreen = () => {
         } catch (error) {
           console.error('Error loading email:', error);
         }
+    };
+
+    const loadKeys = async () => {
+        console.log("loading keys")
+        try {
+          const key = await AsyncStorage.getItem('userKey');
+          if (key) {
+            setUserKey(key);
+          }
+        } catch (error) {
+          console.error('Error loading key:', error);
+        }
       };
 
     const fetchData = async () => {
         const email = await loadEmail();
+        await loadKeys();
         setUserEmail(email);
 
         const response = await axios.post(API_URL+'conversation/get', data = {email: email});
