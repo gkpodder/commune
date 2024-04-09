@@ -4,6 +4,7 @@ import React from 'react'
 const ChatDisplay = ({chatName, unreadCount, lastMessage, onPress}) => {
     return (
         <TouchableOpacity onPress={onPress}>
+          <Text>                  </Text>
             <View style={styles.card}>
                 <View style={styles.infoContainer}>
                 <Text style={styles.chatName}>{chatName}</Text>

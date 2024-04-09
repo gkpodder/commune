@@ -42,5 +42,6 @@ export default Chats
 const styles = StyleSheet.create({
     scrollView: {
       flex: 1, // Fills the available height for scrolling
+      width: "100%"
     },
   });

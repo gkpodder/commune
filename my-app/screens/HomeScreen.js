@@ -46,16 +46,6 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    chatSection: {
-      flex: 1,
-      width: "100%",
-      backgroundColor: 'white',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    button: {
-      zIndex: 1, // Ensure buttons appear above the empty section
-    },
     backgroundColor: '#fff',
   },
   bottomBar: {
@@ -80,4 +70,8 @@ const styles = StyleSheet.create({
   button: {
     zIndex: 1, // Ensure buttons appear above the empty section
   },
+  scrollView: {
+    flex: 1, 
+    width: "100%"
+  }
 });
