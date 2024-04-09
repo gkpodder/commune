@@ -1,6 +1,7 @@
 const SummaryService = require("../services/summarizeService.ts");
 
 const getSummary = async (req, res) => {
+    console.log("get summary call")
     try {
         const chatContents = req.body;
         const summaries = {};
@@ -8,8 +9,14 @@ const getSummary = async (req, res) => {
         // Generate summaries for each chat
         for (const chatId in chatContents) {
             const content = chatContents[chatId].content;
-            const summary = await SummaryService.genSummary(content);
-            summaries[chatId] = { content: summary };
+            if (content) {
+                const summary = await SummaryService.genSummary(content);
+                summaries[chatId] = { content: summary };
+            } else {
+                summaries[chatId] = { content: "User is up to date with this chat"};
+            }
+            
+            
         }
         res.send(summaries);
     } catch (error) {
