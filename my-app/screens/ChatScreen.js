@@ -52,7 +52,7 @@ const ChatScreen = ({ route }) => {
   useEffect(() => {
     const loadData = async () => {
       await loadEmail()
-      await loadKeys()
+      loadKeys()
       fetchMessages();
       
     };

@@ -4,6 +4,8 @@ import LayoutComponent from '../components/Layout'
 import axios from 'axios';
 import ReceiveUserComponent from '../components/ReceiveUserComponent';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import SessionService from '../components/SessionService';
+import { useNavigation } from '@react-navigation/native';
 
 const ReceiveConversationScreen = () => {
 
@@ -30,6 +32,7 @@ const ReceiveConversationScreen = () => {
           const key = await AsyncStorage.getItem('userKey');
           if (key) {
             setUserKey(key);
+            return key;
           }
         } catch (error) {
           console.error('Error loading key:', error);
@@ -63,7 +66,14 @@ const ReceiveConversationScreen = () => {
         console.log(email);
         console.log(userEmail);
         const response = await axios.post(API_URL+'conversation/accept', data={sender: email, recipient: userEmail});
-        console.log(response.data);
+        const userKey = await loadKeys();
+        console.log(userKey);
+        const key = response.data.key;
+        const chatId = response.data.chatId;
+        const parsedKey = key.replace(userKey+"(", "").replace(")", "");
+
+        await SessionService.addSessionKey(parsedKey, chatId);
+        console.log('Session key added:', parsedKey, chatId);
     }
 
     const onReject = (email) => {

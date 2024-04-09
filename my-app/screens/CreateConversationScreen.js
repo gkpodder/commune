@@ -5,6 +5,9 @@ import LayoutComponent from '../components/Layout';
 import axios from 'axios';
 import AddUserComponent from '../components/AddUserComponent';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import SessionService from '../components/SessionService'; // Adjust the path based on your file structure
+
 
 const CreateConversationScreen = () => {
 
@@ -16,6 +19,7 @@ const CreateConversationScreen = () => {
   const [ selectedEmail, setSelectedEmail ] = useState("");
   const [ userEmail, setUserEmail ] = useState("");
   const [ chatName, setChatName ] = useState("");
+  const [ userKey, setUserKey ] = useState("");
 
   const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -28,52 +32,6 @@ const CreateConversationScreen = () => {
       }
     } catch (error) {
       console.error('Error loading email:', error);
-    }
-  };
-
-  const saveSessionKeys = async (keysObject) => {
-    try {
-      // Convert the keysObject to a string using JSON.stringify
-      const keysString = JSON.stringify(keysObject);
-      
-      // Store the serialized keysObject in AsyncStorage
-      await AsyncStorage.setItem('sessionKeys', keysString);
-      
-      console.log('Session keys saved');
-    } catch (error) {
-      console.error('Error saving session keys:', error);
-    }
-  };
-
-  const addSessionKey = async (newKey, newValue) => {
-    try {
-      // Retrieve existing keys from AsyncStorage
-      const keysString = await AsyncStorage.getItem('sessionKeys');
-      let keysObject = keysString ? JSON.parse(keysString) : {};
-  
-      // Add the new key to the existing keys object
-      keysObject[newKey] = newValue;
-  
-      // Store the updated keys object in AsyncStorage
-      await AsyncStorage.setItem('sessionKeys', JSON.stringify(keysObject));
-  
-      console.log('Session key added:', newKey);
-    } catch (error) {
-      console.error('Error adding session key:', error);
-    }
-  };
-
-  const getSessionKeys = async () => {
-    try {
-      const keysString = await AsyncStorage.getItem('sessionKeys');
-      if (keysString !== null) {
-        const keysObject = JSON.parse(keysString);
-        console.log('Session keys retrieved:', keysObject);
-      } else {
-        console.log('No session keys found');
-      }
-    } catch (error) {
-      console.error('Error retrieving session keys:', error);
     }
   };
 
@@ -129,10 +87,29 @@ const CreateConversationScreen = () => {
     setIsModal(!isModal);
   }
 
-  const createConversation = async () => {
-    const response = await axios.post(API_URL+'conversation/create', data = {sender: userEmail, recipient: selectedEmail, chatName: chatName});
-    console.log(response.data);
-  }
+  const loadKey = async () => {
+    try {
+      const key = await AsyncStorage.getItem('userKey');
+      if (key !== null) {
+        setUserKey(key);
+        return key;
+      }
+    } catch (error) {
+      console.error('Error loading email:', error);
+    }
+  };
+
+    const createConversation = async () => {
+      const response = await axios.post(API_URL+'conversation/create', data = {sender: userEmail, recipient: selectedEmail, chatName: chatName});
+      const userKey = await loadKey();
+      console.log(userKey);
+      const key = response.data.key;
+      const chatId = response.data.chatId;
+      const parsedKey = key.replace(userKey+"(", "").replace(")", "");
+
+      await SessionService.addSessionKey(parsedKey, chatId);
+      console.log('Session key added:', parsedKey, chatId);
+    }
 
   if (isLoading) {
     return (

@@ -64,7 +64,15 @@ const createConversationRequest = async (sender, recipient, chatName) => {
             console.error('Error creating request: ' + error);
             return null;
         })
-        return sender + "(" + sessionKey + ")";
+
+        const collectionRef = db.collection('chats'); // Replace 'your-collection-name' with your actual collection name
+        const snapshot = await collectionRef.get();
+        const count = snapshot.size;
+
+        return {
+            key: senderKey + "(" + sessionKey + ")",
+            chatId: count
+        };
     } catch (error) {
         console.error('Error creating document:', error);
         return false; // Return false if there's an error creating the document
@@ -220,7 +228,10 @@ const acceptConversationRequest = async (senderEmail, recipientEmail) => {
         await batch.commit();
 
         console.log('Request deleted successfully');
-        return recipient + "(" + master + ")";
+        return {
+            key: recipient + "(" + sessionKey + ")",
+            chatId: count
+        };
     } catch (error) {
         console.error('Error accepting conversation request:', error);
         throw error;
