@@ -15,6 +15,7 @@ const CreateConversationScreen = () => {
   const [ isModal, setIsModal ] = useState(false);
   const [ selectedEmail, setSelectedEmail ] = useState("");
   const [ userEmail, setUserEmail ] = useState("");
+  const [ chatName, setChatName ] = useState("");
 
   const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -129,7 +130,7 @@ const CreateConversationScreen = () => {
   }
 
   const createConversation = async () => {
-    const response = await axios.post(API_URL+'conversation/create', data = {sender: userEmail, recipient: selectedEmail});
+    const response = await axios.post(API_URL+'conversation/create', data = {sender: userEmail, recipient: selectedEmail, chatName: chatName});
     console.log(response.data);
   }
 
@@ -157,6 +158,9 @@ const CreateConversationScreen = () => {
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
                 <Text>Confirm that you'd like to request a conversation with { selectedEmail } </Text>
+                <View style={styles.searchContainer}>
+                  <TextInput value={chatName} onChangeText={setChatName} style={styles.search} placeholder="enter chat name"></TextInput>
+                </View>
                 <Button buttonText="Confirm" onPress={createConversation} />
                 <Button buttonText="Close" onPress={toggleModal} />
               </View>
@@ -218,5 +222,16 @@ styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     elevation: 5, // Shadow for Android
+    alignItems: "center"
+  },
+  input: {
+    width: '80%',
+    height: 40,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#ccc', // Light gray border color
+    borderRadius: 5,
+    backgroundColor: '#fff', // White background
+    color: '#333', // Dark text color
   },
 })

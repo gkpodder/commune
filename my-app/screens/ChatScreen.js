@@ -12,7 +12,7 @@ const ChatScreen = ({ route }) => {
   const { chatId, chatName } = route.params;
   const [messages, setMessages] = useState([]);
   const [userEmail, setUserEmail] = useState("");
-  const [ otherEmail, setOtherEmail ] = useState(undefined);
+  const [sessionKey, setSessionKey] = useState("");
 
   const loadEmail = async () => {
     try {
@@ -24,13 +24,43 @@ const ChatScreen = ({ route }) => {
     } catch (error) {
       console.error('Error loading email:', error);
     }
-   };
+  };
 
-   useEffect(() => {
-      async () => {
+  const loadKeys = async () => {
+    console.log("loading keys")
+    try {
+      const storedKeysString = await AsyncStorage.getItem('sessionKey');
+      console.log(storedKeysString);
+      if (storedKeysString !== null) {
+        const storedKeys = JSON.parse(storedKeysString);
+        const matchingKey = storedKeys.find(obj => obj.chatId === chatId);
+
+        if (matchingKey) {
+          const key = matchingKey.key;
+          console.log('Matching key:', key);
+          setSessionKey(key);
+          return key;
+        } else {
+          console.log('No matching key found.');
+        }
+      }
+    } catch (error) {
+      console.error('Error loading key:', error);
+    }
+  };
+
+  useEffect(() => {
+    const loadData = async () => {
       await loadEmail()
+      await loadKeys()
+      fetchMessages();
+      
     };
-  }, []); 
+
+    loadData();
+
+    fetchMessages();
+  }, [sessionKey]); 
 
    const extractTimestamp = (messageTime) => {
     if (typeof messageTime === 'string') {
@@ -54,8 +84,12 @@ const ChatScreen = ({ route }) => {
   };
 
   const fetchMessages = async () => {
+    const userEmail = await loadEmail();
+    const _ = await loadKeys();
+    // TODO fix fetchMessages completing before await loadKeys()
     try {
-      const userEmail = await loadEmail();
+      const _ = await loadKeys();
+      
       const response = await axios.get(API_URL + 'message/getAllMessages', {
         params: {
             email: userEmail, // Pass the email as a query parameter
@@ -66,34 +100,37 @@ const ChatScreen = ({ route }) => {
       // Filter messages based on chatId
       const filteredMessages = response.data.filter(message => message.chatId === chatId);
 
-      // Sort messages before setting state
-      const sortedMessages = sortMessages(filteredMessages);
+      const filteredDecryptedMessages = filteredMessages.map( message => {
+          const modifiedBody = message.body.replace(sessionKey+"(","").replace(")", "");
+          return { ...message, body: modifiedBody };
+        }
+      );
 
-      const uniqueEmails = [...new Set(filteredMessages.map(message => message.sender))];
-      console.log(uniqueEmails);
+      console.log(filteredDecryptedMessages);
+
+      // Sort messages before setting state
+      const sortedMessages = sortMessages(filteredDecryptedMessages);
 
       setMessages(sortedMessages);
-      console.log(sortedMessages);
     } catch (error) {
       console.log(error);
     }
   };
 
-  useEffect(() => {
-    fetchMessages();
-  }, []);
-  
-
   const handleSend = async (message) => {
-    const currentTime = serverTimestamp();
     const sender = await loadEmail();
+
+    // Encrypt the message using AES-256
+    const encryptedMessage = sessionKey + "(" + message + ")";
+
+    console.log(encryptedMessage);
+
     const newMessage = {
-      body: message,
+      body: encryptedMessage,
       chatId: chatId,
       time: Timestamp.fromDate(new Date()).toDate(),
       sender: sender
     };
-    console.log(newMessage);
 
     try {
       const response = await axios.post(API_URL + 'message/sendMessage', newMessage);

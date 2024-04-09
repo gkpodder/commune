@@ -74,7 +74,7 @@ const signIn = async(email) => {
     console.log("Logging in call");
 
     try {
-        const usersCol = db.collection('users'); // Reference the 'users' collection
+        const usersCol = db.collection('users'); 
         const querySnapshot = await usersCol.where('email', '==', email).get();
     
         if (querySnapshot.empty) {
@@ -82,9 +82,20 @@ const signIn = async(email) => {
         }
     
         const userData = querySnapshot.docs[0].data();
+
+        const keysCol = db.collection('keys'); 
+        const userKeysSnapshot = await keysCol.where('email', '==', email).where('type', '==', "user").get();
+        const keyData = userKeysSnapshot.docs.map(doc => doc.data().key);
+
+        const sessionKeysSnapshot = await keysCol.where('email', '==', email).where('type', '==', "session").get();
+        const sessionKeyData = sessionKeysSnapshot.docs.map(doc => ({key: doc.data().key, chatId: doc.data().chatId}));
     
         // Authentication successful, return user data without password
-        return userData.chats;
+        return {
+          chats: userData.chats,
+          userKey: keyData,
+          sessionKeys: sessionKeyData
+        };
       } catch (error) {
         console.error('Error signing in:', error);
         throw error;
@@ -126,7 +137,7 @@ const signUp = async(email) => {
 
       const keyId = await createNewDocument(keyCollectionName, newKeyData);
       console.log('New document created with ID:', keyId);
-      return true; // Return true if document creation succeeds
+      return newKey; // Return true if document creation succeeds
   } catch (error) {
       console.error('Error creating document:', error);
       return false; // Return false if there's an error creating the document
