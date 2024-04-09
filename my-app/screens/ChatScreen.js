@@ -3,9 +3,11 @@ import React, { useState, useEffect } from 'react';
 import MessageList from '../components/MessageList';
 import NewMessageInput from '../components/NewMessageInput';
 import axios from 'axios';
-import { Timestamp, serverTimestamp } from "@firebase/firestore";
+import { Timestamp, serverTimestamp, collection, onSnapshot, query, where } from "@firebase/firestore";
 import 'firebase/database';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { db } from '../FirebaseConfig';
+import { update } from 'firebase/database';
 
 const ChatScreen = ({ route }) => {
   const API_URL = process.env.EXPO_PUBLIC_API_URL;
@@ -30,6 +32,18 @@ const ChatScreen = ({ route }) => {
       async () => {
       await loadEmail()
     };
+
+    const messagesQuery = query(
+      collection(db, 'messages'),
+      where('chatId', '==', chatId) // Filter by chatId
+      // orderBy('createdAt', 'desc') // Order by createdAt descending (optional)
+    );
+    
+    const unsubscribe = messagesQuery.onSnapshot((snapshot) => {
+      const updatedDocuments = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      // Process the updated documents here (e.g., update state)
+    });
+
   }, []); 
 
    const extractTimestamp = (messageTime) => {
