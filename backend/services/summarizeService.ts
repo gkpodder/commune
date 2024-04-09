@@ -78,7 +78,7 @@ async function getConcatenatedUserChatsById(email) {
         // Add some hardcoded chat bodies to the chatBodies object
         let contents2 = {
 
-            "1": {
+            "7": {
                 "content": "Person 1: Hey, Emily, have you watched the latest episode of that new TV series everyone's talking about?\nPerson 2: No, I haven't had the chance to catch up yet. Is it good?\nPerson 1: It's amazing! The plot twists are mind-blowing, and the characters are so well-developed.\nPerson 2: Sounds intriguing! I'll definitely add it to my watchlist.\nPerson 1: You should! We can binge-watch it together sometime.\nPerson 2: That sounds like a plan. Thanks for the recommendation!\nPerson 1: No problem! Let me know when you're free, and we'll set up a viewing party.\nPerson 2: Will do!"
             },
             "11": {
