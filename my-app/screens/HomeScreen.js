@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   bottomBar: {
-    position: 'absolute',
+    // position: 'absolute',
     bottom: 0, // Position the top bar at the bottom of the screen
     left: 0,
     right: 0,
