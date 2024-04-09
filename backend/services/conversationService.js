@@ -38,7 +38,7 @@ const createNewDocument = async (collectionName, data) => {
   };
 
 
-const createConversationRequest = async (sender, recipient) => {
+const createConversationRequest = async (sender, recipient, chatName) => {
     console.log("creating conversation request");
 
     try {
@@ -52,7 +52,8 @@ const createConversationRequest = async (sender, recipient) => {
             recipient: recipientKey,
             senderEmail: sender,
             recipientEmail: recipient,
-            master: sessionKey
+            master: sessionKey,
+            chatName: chatName
         }
 
         createNewDocument(collectionName, newRequestData)
@@ -63,7 +64,15 @@ const createConversationRequest = async (sender, recipient) => {
             console.error('Error creating request: ' + error);
             return null;
         })
-        return sessionKey;
+
+        const collectionRef = db.collection('chats'); // Replace 'your-collection-name' with your actual collection name
+        const snapshot = await collectionRef.get();
+        const count = snapshot.size;
+
+        return {
+            key: senderKey + "(" + sessionKey + ")",
+            chatId: count
+        };
     } catch (error) {
         console.error('Error creating document:', error);
         return false; // Return false if there's an error creating the document
@@ -103,9 +112,24 @@ const acceptConversationRequest = async (senderEmail, recipientEmail) => {
 
     const currentTime = new Date();
 
+    // get chatId by incrementing the Id
+    const collectionRef = db.collection('chats'); // Replace 'your-collection-name' with your actual collection name
+    const snapshot = await collectionRef.get();
+    const count = snapshot.size;
+
+    const requestsCol = db.collection('requests');
+    const requestQuery = await requestsCol
+    .where('senderEmail', '==', senderEmail)
+    .where('recipientEmail', '==', recipientEmail)
+    .limit(1)
+    .get();
+    const chatName = requestQuery.docs[0].data().chatName;
+    const master = requestQuery.docs[0].data().master;
+    const recipient = requestQuery.docs[0].data().recipient;
+
     const newChatData = {
-        chatId: 5,
-        chatName: "placeholder",
+        chatId: count,
+        chatName: chatName,
         lastMessage: "This is a new chat",
         lastActive: currentTime,
         unreadCount: 0,
@@ -140,6 +164,55 @@ const acceptConversationRequest = async (senderEmail, recipientEmail) => {
 
         console.log('Chats updated successfully');
 
+        // insert into chats collection
+        const chatData = {
+            chatName: chatName,
+            chatId: count
+        }
+
+        createNewDocument("chats", chatData)
+        .then((documentId) => {
+            return ('New document created with ID: ' + documentId);
+        })
+        .catch((error) => {
+            console.error('Error creating request: ' + error);
+            return null;
+        })
+
+        // insert into keys collection twice
+        const keyDataSender = {
+            email: senderEmail,
+            chatId: count,
+            key: master,
+            type: "session"
+        }
+
+        createNewDocument("keys", keyDataSender)
+        .then((documentId) => {
+            return ('New document created with ID: ' + documentId);
+        })
+        .catch((error) => {
+            console.error('Error creating request: ' + error);
+            return null;
+        })
+
+        // insert into keys collection
+        const keyDataRecipient = {
+            email: recipientEmail,
+            chatId: count,
+            key: master,
+            type: "session"
+        }
+
+        createNewDocument("keys", keyDataRecipient)
+        .then((documentId) => {
+            return ('New document created with ID: ' + documentId);
+        })
+        .catch((error) => {
+            console.error('Error creating request: ' + error);
+            return null;
+        })
+
         // delete the request from requests
         const requestsCol = db.collection('requests');
         const requestQuery = await requestsCol
@@ -153,8 +226,12 @@ const acceptConversationRequest = async (senderEmail, recipientEmail) => {
         });
 
         await batch.commit();
+
         console.log('Request deleted successfully');
-        return true;
+        return {
+            key: recipient + "(" + sessionKey + ")",
+            chatId: count
+        };
     } catch (error) {
         console.error('Error accepting conversation request:', error);
         throw error;

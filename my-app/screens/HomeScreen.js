@@ -1,14 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Button from '../components/Button';
 import ImageButton from '../components/ImageButton';
 import Chats from '../components/Chats';
 import CreateConversationComponent from '../components/CreateConversationComponent';
 import ReceiveConversationComponent from '../components/ReceiveConversationComponent';
+import { useFocusEffect } from '@react-navigation/native';
+import axios from 'axios';
+
+const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 const HomeScreen = ({navigation, route}) => {
+  const { email } = route.params;
 
-  const { chatsData } = route.params;
+  const [chatsData, setChatsData] = useState([]);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.post(API_URL+'account/signIn', data = {email: email});
+      const body = response.data;
+      const chats = body.chats;
+      setChatsData(chats);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchData();
+      return () => {
+        // Cleanup if needed
+      };
+    }, [])
+  );
 
   const handleSummarizePress = () => {
     navigation.navigate("Summarize");
