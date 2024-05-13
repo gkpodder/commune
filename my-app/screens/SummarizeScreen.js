@@ -10,7 +10,7 @@ const SummarizeScreen = () => {
   const [contents, setContents] = useState({});
   const [userEmail, setUserEmail] = useState("");
   const API_URL = process.env.EXPO_PUBLIC_API_URL;
-  //const user = { "user": "gkpodder2003@gmail.com" };
+
 
   const loadEmail = async () => {
     try {
