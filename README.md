@@ -1,4 +1,12 @@
-# Commune
+# Commune 
+
+Commune is a secure chatting app that has a slew of features such as automatic unread chat summaries using the cohere's Command-r, e2e encryption and real-time chatting synchronization.
+
+## Commune Demo 
+
+https://github.com/gkpodder/commune/assets/52678361/493fc049-6c45-4b58-a770-160d21b48a1c
+
+
 
 run the backend first
 
