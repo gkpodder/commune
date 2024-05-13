@@ -1,6 +1,6 @@
 # Commune 
 
-Commune is a secure chatting app that has a slew of features such as automatic unread chat summaries using the cohere's Command-r, e2e encryption and real-time chatting synchronization.
+Commune is a secure chatting app that has a slew of features such as automatic unread chat summaries using Cohere's Command-r, e2e encryption and real-time chatting synchronization.
 
 ## Commune Demo 
 
